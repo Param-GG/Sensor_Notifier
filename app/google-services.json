@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "838996555137",
+    "project_id": "sensor-notifier-354f1",
+    "storage_bucket": "sensor-notifier-354f1.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:838996555137:android:ca43651d97196dd01fe480",
+        "android_client_info": {
+          "package_name": "com.example.sensornotifier"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "838996555137-fd4qcd4soaifmp5rtag4drsq9r6pie21.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA4_xsXxEREElZ7JZbUEbuMZgoD0vpk86A"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "838996555137-fd4qcd4soaifmp5rtag4drsq9r6pie21.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
