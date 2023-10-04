@@ -20,7 +20,7 @@ class WebViewActivity : AppCompatActivity() {
         override fun onReceive(context: Context?, intent: Intent?) {
             // Reload the WebView when the broadcast is received
             webView.reload()
-            retrieveData()
+//            retrieveData()
         }
     }
 
@@ -44,9 +44,9 @@ class WebViewActivity : AppCompatActivity() {
 
     }
 
-    fun retrieveData() {
-        TODO()
-    }
+//    fun retrieveData() {
+//        TODO()
+//    }
 
     override fun onDestroy() {
         super.onDestroy()

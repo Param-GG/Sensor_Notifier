@@ -36,11 +36,10 @@ class ForegroundService: Service() {
         // Create an instance of SensorNotificationService
         val localNotificationService = LocalNotificationService()
 
-        val temp = 32
-        val humidity = 20
-
-        // Show the notification using the SensorNotificationService
-        localNotificationService.showNotification(this, temp, humidity, 30, 25)
+        var temp = 0
+        var humidity = 0
+        val tempThreshold = 30
+        val humidityThreshold = 25
 
         // Build the foreground notification
         val notification: Notification = NotificationCompat.Builder(this, "foreground_channel_id")
@@ -64,8 +63,14 @@ class ForegroundService: Service() {
                     val reloadIntent = Intent("ReloadWebViewAction")
                     sendBroadcast(reloadIntent)
                 }
+                temp = 32
+                humidity = 20
+                if (temp > tempThreshold || humidity > humidityThreshold) {
+                    // Show the notification using the SensorNotificationService
+                    localNotificationService.showNotification(applicationContext.applicationContext, temp, humidity)
+                }
             }
-        }, 0, 15 * 60 * 1000) // 15 minutes in milliseconds
+        }, 0, 5 * 1000) // 15 minutes in milliseconds
 
         return START_STICKY
 

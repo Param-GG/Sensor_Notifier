@@ -14,9 +14,7 @@ class LocalNotificationService {
     fun showNotification(
         context: Context,
         tempSensor: Int,
-        humiditySensor: Int,
-        tempThreshold: Int,
-        humidityThreshold: Int
+        humiditySensor: Int
     ) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val channel = NotificationChannel(
@@ -28,25 +26,23 @@ class LocalNotificationService {
             notificationManager.createNotificationChannel(channel)
         }
 
-        if (tempSensor > tempThreshold || humiditySensor > humidityThreshold) {
-            val builder = NotificationCompat.Builder(context, "sensor_notifications")
-                .setSmallIcon(R.drawable.ic_notification_foreground)
-                .setContentTitle("Sensor Alert")
-                .setContentText("Sensor value exceeded threshold!")
-                .setPriority(NotificationCompat.PRIORITY_HIGH)
-                .setCategory(NotificationCompat.CATEGORY_ALARM)
-                .setAutoCancel(true)
+        val builder = NotificationCompat.Builder(context, "sensor_notifications")
+            .setSmallIcon(R.drawable.ic_notification_foreground)
+            .setContentTitle("Sensor Alert")
+            .setContentText("Sensor value exceeded threshold!")
+            .setPriority(NotificationCompat.PRIORITY_HIGH)
+            .setCategory(NotificationCompat.CATEGORY_ALARM)
+            .setAutoCancel(true)
 
-            val intent = Intent(context, WebViewActivity::class.java)
-            val pendingIntent =
-                PendingIntent.getActivity(
-                    context, 0, intent,
-                    PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
-                )
-            builder.setContentIntent(pendingIntent)
+        val intent = Intent(context, WebViewActivity::class.java)
+        val pendingIntent =
+            PendingIntent.getActivity(
+                context, 0, intent,
+                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+            )
+        builder.setContentIntent(pendingIntent)
 
-            val notificationManager = NotificationManagerCompat.from(context)
-            notificationManager.notify(1, builder.build())
-        }
+        val notificationManager = NotificationManagerCompat.from(context)
+        notificationManager.notify(1, builder.build())
     }
 }
