@@ -1,12 +1,15 @@
 package com.example.sensornotifier
 
 import android.Manifest
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.webkit.WebView
 import android.widget.Button
+import android.widget.EditText
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
@@ -19,30 +22,14 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
-            if (!task.isSuccessful) {
-                Log.w("Token", "Fetching FCM registration token failed", task.exception)
-                return@OnCompleteListener
-            }
+        val etValue = findViewById<EditText>(R.id.editText)
+        val btn = findViewById<Button>(R.id.btn)
 
-            // Get new FCM registration token
-            val token = task.result
-            Log.d("Token", "The token is: $token")
-        })
-
-        val onBtn = findViewById<Button>(R.id.onBtn)
-        val offBtn = findViewById<Button>(R.id.offBtn)
-
-        val database = FirebaseDatabase.getInstance()
-        val dbReference = database.getReference("sensor state")
-        val dbFns = DatabaseFunctions()
-
-        onBtn.setOnClickListener {
-            dbFns.setSensorState(dbReference)
-        }
-
-        offBtn.setOnClickListener {
-            dbFns.resetSensorState(dbReference)
+        btn.setOnClickListener {
+            val enteredIP = etValue.text.toString()
+            val intent = Intent(this, WebViewActivity::class.java)
+            intent.putExtra("IpAddress",enteredIP)
+            startActivity(intent)
         }
     }
 }
