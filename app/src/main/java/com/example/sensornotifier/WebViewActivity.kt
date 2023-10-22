@@ -34,11 +34,10 @@ class WebViewActivity : AppCompatActivity() {
 
         val receivedIntent = intent
         val ipAddress = receivedIntent.getStringExtra("IpAddress")
-        webView = findViewById<WebView>(R.id.webView)
+        webView = findViewById(R.id.webView)
 
-//        webView.loadUrl("http://localhost.$ipAddress.com")
-        webView.loadUrl("https://google.com")
-
+        webView.loadUrl("http://192.168.137.38/")
+//        webView.loadUrl("www.ceeri.res.in/attendance-system/")
         val serviceIntent = Intent(this, ForegroundService::class.java)
         ContextCompat.startForegroundService(this, serviceIntent)
 
