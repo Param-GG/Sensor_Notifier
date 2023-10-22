@@ -1,15 +1,15 @@
-package com.example.sensornotifier
+package com.example.sensornotifier.Activities
 
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.os.Bundle
-import android.os.Handler
-import android.util.Log
 import android.webkit.WebView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import com.example.sensornotifier.R
+import com.example.sensornotifier.Services.ForegroundService
 
 class WebViewActivity : AppCompatActivity() {
 

@@ -1,4 +1,4 @@
-package com.example.sensornotifier
+package com.example.sensornotifier.Services
 
 import android.app.NotificationChannel
 import android.app.NotificationManager
@@ -8,6 +8,8 @@ import android.content.Intent
 import android.os.Build
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
+import com.example.sensornotifier.R
+import com.example.sensornotifier.Activities.WebViewActivity
 
 class LocalNotificationService {
 

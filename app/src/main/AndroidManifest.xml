@@ -25,7 +25,7 @@
             android:resource="@color/white" />
 
         <activity
-            android:name=".MainActivity"
+            android:name=".Activities.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -33,9 +33,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".WebViewActivity" />
+        <activity android:name=".Activities.WebViewActivity" />
 
-        <service android:name=".ForegroundService" />
+        <service android:name=".Services.ForegroundService" />
 
     </application>
 

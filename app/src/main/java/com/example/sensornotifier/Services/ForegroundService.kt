@@ -1,4 +1,4 @@
-package com.example.sensornotifier
+package com.example.sensornotifier.Services
 
 import android.app.Notification
 import android.app.NotificationChannel
@@ -10,8 +10,8 @@ import android.os.Build
 import android.os.Handler
 import android.os.IBinder
 import android.os.Looper
-import android.util.Log
 import androidx.core.app.NotificationCompat
+import com.example.sensornotifier.R
 import java.util.Timer
 import java.util.TimerTask
 
