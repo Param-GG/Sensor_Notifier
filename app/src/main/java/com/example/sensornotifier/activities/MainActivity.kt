@@ -1,4 +1,4 @@
-package com.example.sensornotifier.Activities
+package com.example.sensornotifier.activities
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity

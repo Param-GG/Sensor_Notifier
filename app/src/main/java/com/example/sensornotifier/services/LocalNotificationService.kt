@@ -1,4 +1,4 @@
-package com.example.sensornotifier.Services
+package com.example.sensornotifier.services
 
 import android.app.NotificationChannel
 import android.app.NotificationManager
@@ -9,14 +9,12 @@ import android.os.Build
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import com.example.sensornotifier.R
-import com.example.sensornotifier.Activities.WebViewActivity
+import com.example.sensornotifier.activities.WebViewActivity
 
 class LocalNotificationService {
 
     fun showNotification(
-        context: Context,
-        tempSensor: Int,
-        humiditySensor: Int
+        context: Context
     ) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val channel = NotificationChannel(

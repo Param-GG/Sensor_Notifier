@@ -1,17 +1,21 @@
-package com.example.sensornotifier.Services
+package com.example.sensornotifier.services
 
 import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.app.Service
+import android.content.BroadcastReceiver
+import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.os.Build
 import android.os.Handler
 import android.os.IBinder
 import android.os.Looper
 import androidx.core.app.NotificationCompat
 import com.example.sensornotifier.R
+import com.example.sensornotifier.utilities.SensorData
 import java.util.Timer
 import java.util.TimerTask
 
@@ -33,26 +37,22 @@ class ForegroundService: Service() {
             notificationManager.createNotificationChannel(channel)
         }
 
-        // Create an instance of SensorNotificationService
-        val localNotificationService = LocalNotificationService()
-
-        var temp = 0
-        var humidity = 0
-        val tempThreshold = 30
-        val humidityThreshold = 25
-
         // Build the foreground notification
         val notification: Notification = NotificationCompat.Builder(this, "foreground_channel_id")
             .setContentTitle("Foreground Service")
             .setContentText("Running in the background")
             .setSmallIcon(R.drawable.ic_notification_foreground)
-            .setContentIntent(PendingIntent.getActivity(
-                this, 0, intent,
-                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE))
+//            .setContentIntent(PendingIntent.getActivity(
+//                this, 1, intent,
+//                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE))
             .build()
 
         // Start the service as a foreground service
         startForeground(2, notification)
+
+        // Register the broadcast receiver
+        val filter = IntentFilter("SendDataToService")
+        registerReceiver(dataReceiver, filter)
 
         // Schedule a task to refresh the WebView every 15 minutes
         timer = Timer()
@@ -63,21 +63,36 @@ class ForegroundService: Service() {
                     val reloadIntent = Intent("ReloadWebViewAction")
                     sendBroadcast(reloadIntent)
                 }
-                temp = 32
-                humidity = 20
-                if (temp > tempThreshold || humidity > humidityThreshold) {
-                    // Show the notification using the SensorNotificationService
-                    localNotificationService.showNotification(applicationContext.applicationContext, temp, humidity)
-                }
             }
-        }, 0, 5 * 1000) // 15 minutes in milliseconds
+        }, 0, 1 * 60 * 1000) // 15 minutes in milliseconds
 
         return START_STICKY
 
     }
 
+    // Register broadcast receiver
+    private val dataReceiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context?, i1: Intent?) {
+            if (i1?.action == "SendDataToService") {
+                val alarmStatus = i1.getBooleanExtra("alarm",false)
+
+                // Process the data received from the activity
+                val localNotificationService = LocalNotificationService()
+                if (alarmStatus) {
+                    // Show the notification using the SensorNotificationService
+                    localNotificationService.showNotification(applicationContext.applicationContext)
+                }
+            }
+        }
+    }
+
     override fun onBind(p0: Intent?): IBinder? {
         return null
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        unregisterReceiver(dataReceiver)
     }
 
 }
