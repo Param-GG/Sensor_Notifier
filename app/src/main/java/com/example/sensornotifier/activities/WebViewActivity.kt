@@ -5,7 +5,6 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.os.Bundle
-import android.util.Log
 import android.webkit.WebView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
@@ -16,12 +15,7 @@ import com.example.sensornotifier.utilities.SensorData
 import com.example.sensornotifier.respositories.SensValueRepo
 import com.example.sensornotifier.services.ForegroundService
 import com.example.sensornotifier.viewModels.DbViewModel
-import okhttp3.Call
-import okhttp3.Callback
-import okhttp3.OkHttpClient
-import okhttp3.Request
-import okhttp3.Response
-import okio.IOException
+import com.example.sensornotifier.viewModels.SensorViewModel
 
 class WebViewActivity : AppCompatActivity() {
 
@@ -40,8 +34,8 @@ class WebViewActivity : AppCompatActivity() {
         val ipAddress = receivedIntent.getStringExtra("IpAddress")
         webView = findViewById(R.id.webView)
 
-        url = "http://192.168.137.125/"
-//        url = "https://www.google.com/"
+//        url = "http://192.168.137.220/"
+        url = "https://www.google.com/"
 
         webView.loadUrl(url)
 //        webView.loadUrl("www.ceeri.res.in/attendance-system/")
@@ -59,15 +53,17 @@ class WebViewActivity : AppCompatActivity() {
 
             // Initialise database
             val db = Room.databaseBuilder(context, SensValueDB::class.java, "SensValueDB")
+                .fallbackToDestructiveMigration()
                 .build()
 
             val repo = SensValueRepo(db)
-            val viewModel = DbViewModel(repo)
+            val DbViewModel = DbViewModel(repo)
+            val SensorViewModel = SensorViewModel()
 
             override fun onReceive(context: Context?, intent: Intent?) {
                 // Reload the WebView when the broadcast is received
                 webView.reload()
-                data = retrieveData()
+                data = SensorViewModel.retrieveData(url)
                 if (data.temp > data.tempThreshold || data.humidity > data.humidityThreshold) {
                     // Set alarm status
                     data.alarm = true
@@ -78,48 +74,13 @@ class WebViewActivity : AppCompatActivity() {
 
                 sendBroadcast(sendDataIntent)
 
-                viewModel.insertDataPeriodically(data)
+                DbViewModel.insertDataPeriodically(data)
             }
         }
 
         val filter = IntentFilter("ReloadWebViewAction")
         registerReceiver(reloadReceiver, filter)
 
-    }
-
-
-    fun retrieveData(): SensorData {
-        val client = OkHttpClient()
-        val request = Request.Builder()
-            .url(url)
-            .build()
-
-        val temp = 10
-        val humidity = 50
-        client.newCall(request).enqueue(object : Callback {
-            override fun onResponse(call: Call, response: Response) {
-
-                // Handle the response from the local server here
-                val responseData = response.body?.string()
-                if (responseData != null) {
-                    Log.d("data", responseData)
-                }
-
-
-                // Parse and process the responseData as needed
-
-            }
-
-            override fun onFailure(call: Call, e: IOException) {
-                Log.d("serverDataError", e.toString())
-            }
-        })
-
-        return SensorData(
-            temp = temp,
-            humidity = humidity,
-            time = "30"
-        )
     }
 
     override fun onDestroy() {

@@ -64,7 +64,7 @@ class ForegroundService: Service() {
                     sendBroadcast(reloadIntent)
                 }
             }
-        }, 0, 1 * 60 * 1000) // 15 minutes in milliseconds
+        }, 10 * 1000, 5 * 1000) // 15 minutes in milliseconds
 
         return START_STICKY
 
