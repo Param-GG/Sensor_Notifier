@@ -34,8 +34,9 @@ class WebViewActivity : AppCompatActivity() {
         val ipAddress = receivedIntent.getStringExtra("IpAddress")
         webView = findViewById(R.id.webView)
 
-//        url = "http://192.168.137.220/"
-        url = "https://www.google.com/"
+        url = "http://192.168.137.125/"
+//        url = "http://$ipAddress/"
+//        url = "https://www.google.com/"
 
         webView.loadUrl(url)
 //        webView.loadUrl("www.ceeri.res.in/attendance-system/")
