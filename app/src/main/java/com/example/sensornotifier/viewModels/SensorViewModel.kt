@@ -27,9 +27,14 @@ class SensorViewModel : ViewModel() {
                 .url(url)
                 .build()
 
-            var temperature = 10.0
+            var temperature = 58.0
             var humidity = 50.0
             var currentTime = "default"
+            sensorData = SensorData(
+                temp = temperature,
+                humidity = humidity,
+                time = currentTime
+            )
             client.newCall(request).enqueue(object : Callback {
                 override fun onResponse(call: Call, response: Response) {
 

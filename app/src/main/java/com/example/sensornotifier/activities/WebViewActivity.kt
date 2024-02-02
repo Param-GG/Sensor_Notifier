@@ -41,7 +41,7 @@ class WebViewActivity : AppCompatActivity() {
         val ipAddress = receivedIntent.getStringExtra("IpAddress")
         webView = findViewById(R.id.webView)
 
-        url = "http://192.168.137.165/"
+        url = "http://192.168.137.243/"
 //        url = "http://$ipAddress/"
 //        url = "https://www.google.com/"
 
@@ -89,41 +89,6 @@ class WebViewActivity : AppCompatActivity() {
         val filter = IntentFilter("ReloadWebViewAction")
         registerReceiver(reloadReceiver, filter)
 
-    }
-
-
-    fun retrieveData(): SensorData {
-        val client = OkHttpClient()
-        val request = Request.Builder()
-            .url(url)
-            .build()
-
-        val temp = 10.0
-        val humidity = 50.0
-        client.newCall(request).enqueue(object : Callback {
-            override fun onResponse(call: Call, response: Response) {
-
-                // Handle the response from the local server here
-                val responseData = response.body?.string()
-                if (responseData != null) {
-                    Log.d("data", responseData)
-                }
-
-
-                // Parse and process the responseData as needed
-
-            }
-
-            override fun onFailure(call: Call, e: IOException) {
-                Log.d("serverDataError", e.toString())
-            }
-        })
-
-        return SensorData(
-            temp = temp,
-            humidity = humidity,
-            time = "30"
-        )
     }
 
     override fun onDestroy() {
