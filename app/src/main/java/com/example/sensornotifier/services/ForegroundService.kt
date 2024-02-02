@@ -15,6 +15,8 @@ import android.os.IBinder
 import android.os.Looper
 import androidx.core.app.NotificationCompat
 import com.example.sensornotifier.R
+import com.example.sensornotifier.activities.MainActivity
+import com.example.sensornotifier.activities.WebViewActivity
 import com.example.sensornotifier.utilities.SensorData
 import java.util.Timer
 import java.util.TimerTask
@@ -24,8 +26,8 @@ class ForegroundService: Service() {
     private lateinit var timer: Timer
     private val handler = Handler(Looper.getMainLooper())
 
-    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-
+    override fun onCreate() {
+        super.onCreate()
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val channel = NotificationChannel(
                 "foreground_channel_id",
@@ -36,15 +38,19 @@ class ForegroundService: Service() {
             val notificationManager = context.getSystemService(NotificationManager::class.java)
             notificationManager.createNotificationChannel(channel)
         }
+    }
+    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+
+        val notifyIntent = Intent(this, WebViewActivity::class.java)
 
         // Build the foreground notification
         val notification: Notification = NotificationCompat.Builder(this, "foreground_channel_id")
             .setContentTitle("Foreground Service")
             .setContentText("Running in the background")
             .setSmallIcon(R.drawable.ic_notification_foreground)
-//            .setContentIntent(PendingIntent.getActivity(
-//                this, 1, intent,
-//                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE))
+            .setContentIntent(PendingIntent.getActivity(
+                this, 2, notifyIntent,
+                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE))
             .build()
 
         // Start the service as a foreground service
@@ -64,7 +70,7 @@ class ForegroundService: Service() {
                     sendBroadcast(reloadIntent)
                 }
             }
-        }, 10 * 1000, 5 * 1000) // 15 minutes in milliseconds
+        }, 10 * 1000, 10 * 1000) // 15 minutes in milliseconds
 
         return START_STICKY
 

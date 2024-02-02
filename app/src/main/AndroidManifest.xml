@@ -36,6 +36,14 @@
         <activity android:name=".activities.WebViewActivity" />
 
         <service android:name=".services.ForegroundService" />
+        
+        <receiver android:name=".AppBroadcastReceiver"
+            android:enabled="true"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="STOP_SERVICES" />
+            </intent-filter>
+        </receiver>
 
     </application>
 

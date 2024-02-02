@@ -22,4 +22,10 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
         }
     }
+    override fun onResume() {
+        super.onResume()
+
+        val stopServicesIntent = Intent("STOP_SERVICES")
+        sendBroadcast(stopServicesIntent)
+    }
 }
