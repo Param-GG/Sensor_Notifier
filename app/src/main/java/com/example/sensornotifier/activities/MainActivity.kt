@@ -28,4 +28,11 @@ class MainActivity : AppCompatActivity() {
         val stopServicesIntent = Intent("STOP_SERVICES")
         sendBroadcast(stopServicesIntent)
     }
+
+    override fun onRestart() {
+        super.onRestart()
+
+        val stopServicesIntent = Intent("STOP_SERVICES")
+        sendBroadcast(stopServicesIntent)
+    }
 }

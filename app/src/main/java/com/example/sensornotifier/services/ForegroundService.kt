@@ -48,6 +48,7 @@ class ForegroundService: Service() {
             .setContentTitle("Foreground Service")
             .setContentText("Running in the background")
             .setSmallIcon(R.drawable.ic_notification_foreground)
+            .setOngoing(true)
             .setContentIntent(PendingIntent.getActivity(
                 this, 2, notifyIntent,
                 PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE))
@@ -70,7 +71,7 @@ class ForegroundService: Service() {
                     sendBroadcast(reloadIntent)
                 }
             }
-        }, 10 * 1000, 20 * 1000) // 15 minutes in milliseconds
+        }, 10 * 1000, 15 * 60 * 1000) // 15 minutes in milliseconds
 
         return START_STICKY
 
