@@ -41,7 +41,7 @@ class WebViewActivity : AppCompatActivity() {
         val ipAddress = receivedIntent.getStringExtra("IpAddress")
         webView = findViewById(R.id.webView)
 
-        url = "http://192.168.137.243/"
+        url = "http://192.168.137.197/"
 //        url = "http://$ipAddress/"
 //        url = "https://www.google.com/"
 
@@ -71,18 +71,22 @@ class WebViewActivity : AppCompatActivity() {
             override fun onReceive(context: Context?, intent: Intent?) {
                 // Reload the WebView when the broadcast is received
                 webView.reload()
-                data = sensorViewModel.retrieveData(url)
-                if (data.temp > data.tempThreshold || data.humidity > data.humidityThreshold) {
-                    // Set alarm status
-                    data.alarm = true
+                try {
+                    data = sensorViewModel.retrieveData(url)
+
+                    if (data.temp > data.tempThreshold || data.humidity > data.humidityThreshold) {
+                        // Set alarm status
+                        data.alarm = true
+                    }
+
+                    val sendDataIntent = Intent("SendDataToService")
+                    sendDataIntent.putExtra("alarm", data.alarm)
+
+                    sendBroadcast(sendDataIntent)
+
+                    dbViewModel.insertDataPeriodically(data)
                 }
-
-                val sendDataIntent = Intent("SendDataToService")
-                sendDataIntent.putExtra("alarm", data.alarm)
-
-                sendBroadcast(sendDataIntent)
-
-                dbViewModel.insertDataPeriodically(data)
+                catch (_:Exception) {}
             }
         }
 

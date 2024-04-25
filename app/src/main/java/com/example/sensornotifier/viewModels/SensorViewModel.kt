@@ -1,6 +1,8 @@
 package com.example.sensornotifier.viewModels
 
+import android.os.Build
 import android.util.Log
+import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.sensornotifier.utilities.SensorData
@@ -15,6 +17,8 @@ import okhttp3.Response
 import okio.IOException
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
 class SensorViewModel : ViewModel() {
 
@@ -27,15 +31,11 @@ class SensorViewModel : ViewModel() {
                 .url(url)
                 .build()
 
-            var temperature = 58.0
+            var temperature = 48.0
             var humidity = 50.0
             var currentTime = "default"
-            sensorData = SensorData(
-                temp = temperature,
-                humidity = humidity,
-                time = currentTime
-            )
             client.newCall(request).enqueue(object : Callback {
+                @RequiresApi(Build.VERSION_CODES.O)
                 override fun onResponse(call: Call, response: Response) {
 
                     // Handling the response from server
@@ -50,8 +50,10 @@ class SensorViewModel : ViewModel() {
                         val humTxt = doc.select("span:containsOwn(Humidity)").first()?.
                         nextElementSibling()?.nextElementSibling()?.text()?.substring(0,5)
                         humidity = humTxt?.toDouble()!!
-//                    currentTime = doc.select("p#time").text()
-//                    Log.d("ExtractTime", currentTime)
+                        val formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss")
+                        currentTime = LocalDateTime.now().format(formatter)
+//                        currentTime = doc.select("p#time").text()
+                        Log.d("ExtractTime", currentTime)
                     }
                     sensorData = SensorData(
                         temp = temperature,
